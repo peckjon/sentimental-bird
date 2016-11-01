@@ -1,0 +1,55 @@
+[
+  {
+    "role": "President",
+    "candidates": [
+      {"name": "Hillary Clinton", "twitter": "HillaryClinton"},
+      {"name": "Donald J. Trump", "twitter": "realDonaldTrump"},
+      {"name": "Jill Stein", "twitter": "DrJillStein"},
+      {"name": "Gary Johnson", "twitter": "GovGaryJohnson"}
+    ]
+  },
+  {
+    "role": "Vice President",
+    "candidates": [
+      {"name": "Tim Kaine", "twitter": "timkaine"},
+      {"name": "Michael R. Pence", "twitter": "mike_pence"},
+      {"name": "Ajamu Barak", "twitter": "ajamubaraka"},
+      {"name": "Bill Weld", "twitter": "govbillweld"}
+    ]
+  },
+  {
+    "role": "Senator",
+    "candidates": [
+      {"name": "Patty Murray", "twitter": "PattyMurray"},
+      {"name": "Chris Vance", "twitter": "Chrisvance123"}
+    ]
+  },
+  {
+    "role": "Governor",
+    "candidates": [
+      {"name": "Jay Inslee", "twitter": "JayInslee"},
+      {"name": "Bill Bryant", "twitter": "BillBryantWA"}
+    ]
+  },
+  {
+    "role": "Lieutenant Governor",
+    "candidates": [
+      {"name": "Cyrus Habib", "twitter": "cyrushabib"},
+      {"name": "Marty McClendon", "twitter": "ElectMartyM"}
+    ]
+  },
+  {
+    "role": "Secretary of State",
+    "candidates": [
+      {"name": "Kim Wyman", "twitter": "KimWyman12"},
+      {"name": "Tina Podlodowski", "twitter": "Tinapo"}
+    ]
+  },
+  {
+    "role": "State Treasurer",
+    "candidates": [
+      {"name": "Duane Davidson", "twitter": "DuaneDavidsonWA"},
+      {"name": "Michael Waite"}
+    ]
+  }
+]

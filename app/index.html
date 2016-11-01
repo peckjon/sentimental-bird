@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="giphytags" ng-controller="sentimentController" data-ng-init="init()">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Analyze tweets by (and about) political candidates" />
+    <meta property="og:image" content="http://sentimental-bird.appspot.com/static/logo.png">
+    <link rel="icon" href="/static/favicon-16x16.png" type="image/png" sizes="16x16">
+    <link rel="icon" href="/static/favicon-32x32.png" type="image/png" sizes="32x32">
+    <link rel="icon" href="/static/favicon-96x96.png" type="image/png" sizes="96x96">
+    <link rel="stylesheet" href="/static/foundation.min.css">
+    <link rel="stylesheet" href="/app/app.css">
+    <script type="text/javascript" src="/static/angular.min.js"></script>
+    <script type="text/javascript" src="/app/app.js"></script>
+    <title>Sentimental Bird</title>
+</head>
+<body>
+    <div class="small-10 medium-4 columns headspace">
+        <form ng-submit="getTags()">
+            <div ng-repeat="race in races" class="row">{{race.role}}:
+                <ul>
+                    <li ng-repeat="politician in race.candidates">
+                        <a href="#" title="@{{politician.twitter}}" ng-if="politician.twitter" ng-click="analyzePolitician(politician.twitter)">{{politician.name}}</a>
+                        <span ng-if="!politician.twitter" title="not found on Twitter">{{politician.name}}</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="row">
+                <div class="small-6 columns end"><input type="text" ng-model="uid" placeholder="@username"></div>
+                <a type="button" class="small button" ng-disabled="waitingUser||waitingMentions" ng-click="analyzePolitician()">Analyze</a>
+            </div>
+        </form>
+    </div>
+    <div class="small-11 medium-7 columns end">
+        <a id="results"></a>
+        <div class="row headspace">
+            <div class="row welcome text-justify" ng-hide="uid">
+                <h3 class="row text-center"><img class="logo" src="../static/logo.png">Sentimental Bird</h3>
+                <p>To begin, click any politician's name (or enter a Twitter handle of your choosing and click 'Analyze').</p>
+                <p>We'll inspect their most recent Tweets (and Tweets about them), rate the statements as 'Positive' or 'Negative', and show you a list of keywords used in the top 20% (most positive) and bottom 20% (most negative) tweets.</p>
+                <p>Click any keyword or tweet to see it in context on Twitter.</p>
+                <p>Many thanks to <a target="_blank" href="https://algorithmia.com/">Algorithmia</a> for making this possible!  This application uses <a href="http://algorithmia.com/algorithms/nlp/AnalyzeTweets" target="_blank">AnalyzeTweets</a> and <a href="http://algorithmia.com/algorithms/diego/AnalyzeTwitterUser" target="_blank">AnalyzeTwitterUser</a>.</p>
+            </div>
+            <div class="row" ng-if="waitingUser||waitingMentions"><img src="../static/loading.gif"></div>
+            <div class="row errmsg text-center" ng-if="error">{{error}}</div>
+        </div>
+        <div class="row" ng-if="resultUser&&resultMentions&&!waitingUser">
+            <div class="row headspace text-center"><a class="linky" ng-click="linkKeyword('@'+resultUser.screen_name)"><b>@{{resultUser.screen_name}}</b></a>: {{resultUser.followers | number}} followers</div>
+            <div class="row grid-head">
+                <div class="small-2 columns">&nbsp;</div>
+                <div class="small-5 columns"><b>Talks about:</b></div>
+                <div class="small-5 columns end"><b>Mentioned regarding:</b></div>
+            </div>
+            <div class="row">
+                <div class="small-2 columns grid-label"><b class="positive">Positive</b></div>
+                <div class="small-5 columns grid-ul"><a class="linky" ng-repeat="keyword in resultUser['positive'] track by $index" ng-class="{'positive':contains(keyword,resultMentions['positive']),'negative':contains(keyword,resultMentions['negative'])}" ng-click="linkKeyword(keyword)">{{keyword}}<span ng-if="!$last">, </span></a>&nbsp;</div>
+                <div class="small-5 columns end grid-ur"><a class="linky" ng-repeat="keyword in resultMentions['positive'] track by $index" ng-class="{'positive':contains(keyword,resultUser['positive']),'negative':contains(keyword,resultUser['negative'])}" ng-click="linkKeyword(keyword)">{{keyword}}<span ng-if="!$last">, </span></a>&nbsp;</div>
+            </div>
+            <div class="row">
+                <div class="small-2 columns grid-label"><b class="negative">Negative</b></div>
+                <div class="small-5 columns grid-bl"><a class="linky" ng-repeat="keyword in resultUser['negative'] track by $index" ng-class="{'positive':contains(keyword,resultMentions['positive']),'negative':contains(keyword,resultMentions['negative'])}" ng-click="linkKeyword(keyword)">{{keyword}}<span ng-if="!$last">, </span></a>&nbsp;</div>
+                <div class="small-5 columns end grid-br"><a class="linky" ng-repeat="keyword in resultMentions['negative'] track by $index" ng-class="{'positive':contains(keyword,resultUser['positive']),'negative':contains(keyword,resultUser['negative'])}" ng-click="linkKeyword(keyword)">{{keyword}}<span ng-if="!$last">, </span></a>&nbsp;</div>
+            </div>
+            <div class="row headspace">
+                <div class="grid-head">
+                    <div class="columns end"><b><span class="positive">Positive</span> Mentions</b></div>
+                    <div class="columns end">
+                        <div class="small-6 medium-3 large-2 columns end tweet" ng-if="resultMentions.posTweets==0">(no tweets)</div>
+                        <div class="small-6 medium-3 large-2 columns end linky tweet" ng-repeat="tweet in resultMentions.posTweets | limitTo:12" ng-click="linkTweet(tweet)" title="{{tweet.text}}">{{tweet.text}}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row headspace">
+                <div class="grid-head">
+                    <div class="columns end"><b><span class="negative">Negative</span> Mentions</b></div>
+                    <div class="columns end">
+                        <div class="small-6 medium-3 large-2 columns end tweet" ng-if="resultMentions.negTweets.length==0">(no tweets)</div>
+                        <div class="small-6 medium-3 large-2 columns end linky tweet" ng-repeat="tweet in resultMentions.negTweets | limitTo:12" ng-click="linkTweet(tweet)" title="{{tweet.text}}">{{tweet.text}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

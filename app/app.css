@@ -1,0 +1,82 @@
+/** Foundation overrides **/
+.row {
+  margin-left: 0 !important;
+}
+
+/** App-wide styling **/
+li {
+  list-style: none;
+}
+b {
+  font-size: 0.9em;
+}
+.logo {
+  height: 48px;
+  width: 48px;
+  margin-right: 24px;
+}
+.welcome {
+  padding-top: 1.5em;
+  color: darkblue;
+}
+.welcome h3 {
+  padding-bottom: 1.5em;
+}
+.errmsg {
+  color: darkred;
+}
+.linky {
+  cursor: pointer; cursor: hand;
+  color: black;
+}
+.negative {
+  color: darkred;
+}
+.positive {
+  color: darkblue;
+}
+.positive.negative {
+  color: purple;
+}
+.headspace {
+  padding-top: 1.5em;
+}
+.grid-label {
+  padding-right: 0;
+}
+.grid-head {
+  padding-top: 2em;
+  padding-bottom: 0.5em;
+}
+.grid-ul {
+  font-size: 0.8em;
+  border-right: 1px solid darkgray;
+}
+.grid-ur {
+  font-size: 0.8em;
+  margin-left: -1px;
+  border-left: 1px solid darkgray;
+}
+.grid-bl {
+  font-size: 0.8em;
+  border-top: 1px solid darkgray;
+  border-right: 1px solid darkgray;
+}
+.grid-br {
+  font-size: 0.8em;
+  margin-left: -1px;
+  border-left: 1px solid darkgray;
+  border-top: 1px solid darkgray;
+}
+.tweet {
+  font-size: 0.8em;
+  border: 1px outset lightgray;
+  padding: 2px;
+  height: 4.6em;
+  overflow: hidden;
+}
+@media only screen and (max-width: 40em) {
+  .grid-label {
+    font-size: 0.7em;
+  }
+}

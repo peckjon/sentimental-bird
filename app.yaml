@@ -1,0 +1,31 @@
+application: sentimental-bird
+version: webapp
+runtime: python27
+api_version: 1
+threadsafe: true
+
+## short expiry for development
+default_expiration: "1m"
+
+## automatic scaling
+instance_class: F1
+
+handlers:
+- url: /json/.*
+  script: main.app
+- url: /static
+  static_dir: static
+- url: /app
+  static_dir: app
+- url: /favicon.ico
+  static_files: favicon.ico
+  upload: favicon.ico
+- url: /.*
+  static_files: app/index.html
+  upload: app/index.html
+
+libraries:
+- name: webapp2
+  version: "latest"
+- name: ssl
+  version: "latest"
