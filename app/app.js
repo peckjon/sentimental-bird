@@ -96,7 +96,7 @@ app.controller('sentimentController', function($scope, $http, $anchorScroll) {
      * @param keyword
      */
     $scope.linkKeyword = function(keyword) {
-        window.open('http://twitter.com/search?q='+keyword,'_blank');
+        window.open('http://twitter.com/search?q='+keyword+' '+$scope.uid,'_blank');
     };
 
     /**
