@@ -14,7 +14,7 @@ Jon Peck: [github.com/peckjon](https://github.com/peckjon)
 
 ## License
 
-[WTFPL v2](http://en.wikipedia.org/wiki/WTFPL)
+MIT
 
 ## Structure
 
